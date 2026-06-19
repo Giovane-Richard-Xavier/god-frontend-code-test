@@ -1,49 +1,41 @@
 body {
-  background: white;
-  color: #0a0a0a;
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  background: white;
+  color: #0a0a0a;
 }
 
-.main {
-  width: 100vw;
-  height: 100vh;
-}
-
-.carousel-wrapper {
+.carousel {
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  height: 100%;
-  position: relative;
+  height: 100vh;
 }
 
-.carousel-container {
+.carousel__viewport {
   overflow: hidden;
-  width: 100%;
 }
 
-.carousel-track {
+.carousel__container {
   display: flex;
-  transition: transform 400ms ease;
+}
+
+.carousel__slide {
+  flex: 0 0 100%;
+  min-width: 0;
 }
 
 .carousel-card {
-  min-width: 100%;
-  flex-shrink: 0;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .carousel-card-header {
-  display: flex;
-  flex-direction: column;
   width: 100%;
-  font-size: 22px;
-  padding: 0;
   margin-bottom: 1rem;
 }
 
@@ -51,97 +43,67 @@ body {
   color: #707070;
 }
 
-.carousel-card-header p {
-  font-weight: 700;
-  margin: 0;
-}
-
 .carousel-card-header-info {
   display: flex;
   flex-direction: column;
-  align-items: start;
-  gap: 10px;
+  gap: 8px;
+}
+
+.carousel-card-header-info p {
+  margin: 0;
+  font-weight: 700;
+}
+
+.carousel-card-header-info span {
+  color: #707070;
 }
 
 .carousel-card-image-wrapper {
   position: relative;
-  width: 360px;
-  height: 320px;
+  width: 100%;
+  max-width: 450px;
+  aspect-ratio: 16 / 12;
 }
 
 .carousel-card-links {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3rem;
-  width: 100%;
+  gap: 2rem;
+  margin-top: 1rem;
 }
 
-.carousel-indicators {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-.carousel-indicator {
-  width: 1rem;
-  height: 1rem;
-  border-radius: 100%;
-  border: none;
-  cursor: pointer;
-  background-color: #ccc;
-}
-
-.carousel-indicator-active {
-  background-color: #0a0a0a;
-}
-
-.carousel-actions {
+.carousel-controls {
   display: none;
 }
 
 @media (min-width: 768px) {
-  .carousel-card {
-    min-width: 25%;
-    padding: 0.7rem;
+  .carousel__slide {
+    flex: 0 0 50%;
   }
 
   .carousel-card-header-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    flex-direction: row;
   }
 
-  .carousel-card-image-wrapper {
-    /* position: relative; */
-    width: 480px;
-    height: 420px;
-  }
-
-  .carousel-actions {
+  .carousel-controls {
     display: flex;
-    gap: 1rem;
     justify-content: flex-end;
-    margin-top: 1rem;
-    margin-right: 2rem;
+    gap: 1rem;
+    margin: 2rem 2rem 0 0;
   }
 
-  .carousel-actions button {
+  .carousel-controls button {
     position: relative;
     width: 48px;
     height: 48px;
+    outline: none;
     border: none;
+    background: transparent;
     cursor: pointer;
-    background-color: white;
-    border-radius: 100%;
   }
+}
 
-  .carousel-actions button > svg {
-    color: #0a0a0a;
-  }
-
-  .carousel-indicator {
-    display: none;
+@media (min-width: 1024px) {
+  .carousel__slide {
+    flex: 0 0 25%;
   }
 }

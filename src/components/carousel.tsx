@@ -4,102 +4,79 @@ import Image from "next/image";
 import { useState } from "react";
 import { Link } from "vcc-ui";
 import { useCars } from "../hooks/useCars";
-
-type Props = {
-  images: any[];
-};
-
-let carouselTimer: NodeJS.Timeout;
-const carouselSpeed = 4000;
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 
 export const Carousel = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const { cars } = useCars();
 
-  // QUERY
-  const { cars, loading, error } = useCars();
-  const carsData = cars ?? [];
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: false,
+      align: "start",
+      dragFree: false,
+    },
+    [
+      Autoplay({
+        delay: 5000,
+        stopOnInteraction: true,
+      }),
+    ],
+  );
 
-  const visibleItems = 4;
-
-  const next = () => {
-    if (currentIndex + visibleItems < cars.length) {
-      setCurrentIndex((prev) => prev + 1);
-    }
-  };
-
-  const prev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex((prev) => prev - 1);
-    }
-  };
+  const scrollPrev = () => emblaApi?.scrollPrev();
+  const scrollNext = () => emblaApi?.scrollNext();
 
   return (
-    <div className="carousel-wrapper">
-      <section className="carousel-container">
-        <div
-          className="carousel-track"
-          style={{
-            transform: `translateX(-${currentIndex * 100}%)`,
-          }}
-        >
-          {cars.map((item, index) => (
-            <div key={item.id} className="carousel-card">
-              <div className="carousel-card-header">
-                <h3>{item.bodyType}</h3>
+    <section className="carousel">
+      <div className="carousel__viewport" ref={emblaRef}>
+        <div className="carousel__container">
+          {cars.map((item) => (
+            <div key={item.id} className="carousel__slide">
+              <div className="carousel-card">
+                <div className="carousel-card-header">
+                  <h3>{item.bodyType}</h3>
 
-                <div className="carousel-card-header-info">
-                  <p>{item.modelName}</p>
-                  <span>{item.modelType}</span>
+                  <div className="carousel-card-header-info">
+                    <p>{item.modelName}</p>
+                    <span>{item.modelType}</span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="carousel-card-image-wrapper">
-                <Image
-                  src={item.imageUrl}
-                  alt={item.modelName}
-                  layout="fill"
-                  objectFit="contain"
-                />
-              </div>
+                <div className="carousel-card-image-wrapper">
+                  <Image
+                    src={item.imageUrl}
+                    alt={item.modelName}
+                    layout="fill"
+                    objectFit="contain"
+                  />
+                </div>
 
-              <div className="carousel-card-links">
-                <Link href={`/learn/${item.id}`} arrow="right">
-                  LEARN
-                </Link>
+                <div className="carousel-card-links">
+                  <Link href={`/learn/${item.id}`}>LEARN</Link>
 
-                <Link href={`/shop/${item.id}`} arrow="right">
-                  SHOP
-                </Link>
+                  <Link href={`/shop/${item.id}`}>SHOP</Link>
+                </div>
               </div>
             </div>
           ))}
         </div>
-      </section>
+      </div>
 
-      {/* MOBILE */}
-      <section className="carousel-indicators">
-        {cars.map((_, index) => (
-          <button
-            key={index}
-            className={`carousel-indicator ${currentIndex === index ? "carousel-indicator-active" : ""}`}
-            onClick={() => setCurrentIndex(index)}
-          />
-        ))}
-      </section>
-
-      {/* TABLE AND DESKTOP */}
-      <section className="carousel-actions">
-        <button onClick={prev}>
+      <div className="carousel-controls">
+        <button onClick={scrollPrev} aria-label="Anterior">
           <Image
             src="/images/chevron-circled.svg"
             alt="Anterior"
             layout="fill"
             objectFit="contain"
-            style={{ transform: "rotate(-180deg)" }}
+            style={{
+              transform: "rotate(180deg)",
+            }}
           />
         </button>
 
-        <button onClick={next}>
+        <button onClick={scrollNext} aria-label="Próximo">
           <Image
             src="/images/chevron-circled.svg"
             alt="Próximo"
@@ -107,7 +84,7 @@ export const Carousel = () => {
             objectFit="contain"
           />
         </button>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
