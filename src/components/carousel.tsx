@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "vcc-ui";
 import { useCars } from "../hooks/useCars";
 import useEmblaCarousel from "embla-carousel-react";
@@ -9,6 +9,8 @@ import Autoplay from "embla-carousel-autoplay";
 
 export const Carousel = () => {
   const { cars } = useCars();
+
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
@@ -26,6 +28,26 @@ export const Carousel = () => {
 
   const scrollPrev = () => emblaApi?.scrollPrev();
   const scrollNext = () => emblaApi?.scrollNext();
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    const onSelect = () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    };
+
+    onSelect();
+
+    emblaApi.on("select", onSelect);
+
+    return () => {
+      emblaApi.off("select", onSelect);
+    };
+  }, [emblaApi]);
+
+  const scrollTo = (index: number) => {
+    emblaApi?.scrollTo(index);
+  };
 
   return (
     <section className="carousel">
@@ -85,6 +107,19 @@ export const Carousel = () => {
           />
         </button>
       </div>
+
+      <section className="carousel-indicators">
+        {cars.map((_, index) => (
+          <button
+            key={index}
+            className={`carousel-indicator ${
+              selectedIndex === index ? "carousel-indicator-active" : ""
+            }`}
+            onClick={() => scrollTo(index)}
+            aria-label={`Ir para slide ${index + 1}`}
+          />
+        ))}
+      </section>
     </section>
   );
 };

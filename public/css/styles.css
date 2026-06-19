@@ -75,6 +75,26 @@ body {
   display: none;
 }
 
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+.carousel-indicator {
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+  background: #d9d9d9;
+  cursor: pointer;
+}
+
+.carousel-indicator-active {
+  background-color: #0a0a0a;
+}
+
 @media (min-width: 768px) {
   .carousel__slide {
     flex: 0 0 50%;
@@ -99,6 +119,10 @@ body {
     border: none;
     background: transparent;
     cursor: pointer;
+  }
+
+  .carousel-indicators {
+    display: none;
   }
 }
 
